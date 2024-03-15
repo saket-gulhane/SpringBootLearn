@@ -3,6 +3,7 @@ package com.learnspring.cruddemo.dao;
 import com.learnspring.cruddemo.entity.Course;
 import com.learnspring.cruddemo.entity.Instructor;
 import com.learnspring.cruddemo.entity.InstructorDetail;
+import com.learnspring.cruddemo.entity.Student;
 
 import java.util.List;
 
@@ -34,4 +35,11 @@ public interface AppDAO {
 
     Course findCourseAndReviewsByCourseId(int theId);
 
+    Course findCourseAndStudentByCourseId(int theId);
+
+    Student findStudentAndCourseByStudentId(int theId);
+
+    void update(Student tempStudent);
+
+    void deleteStudentById(int theId);
 }

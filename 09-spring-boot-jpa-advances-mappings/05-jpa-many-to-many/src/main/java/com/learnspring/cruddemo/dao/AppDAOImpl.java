@@ -3,6 +3,7 @@ package com.learnspring.cruddemo.dao;
 import com.learnspring.cruddemo.entity.Course;
 import com.learnspring.cruddemo.entity.Instructor;
 import com.learnspring.cruddemo.entity.InstructorDetail;
+import com.learnspring.cruddemo.entity.Student;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,5 +130,48 @@ public class AppDAOImpl implements AppDAO{
         Course course = query.getSingleResult();
 
         return course;
+    }
+
+    @Override
+    public Course findCourseAndStudentByCourseId(int theId) {
+        TypedQuery<Course> query = entityManager.createQuery(
+                "select c from Course c " +
+                        "JOIN FETCH c.students " +
+                        "where c.id = :data", Course.class
+        );
+
+        query.setParameter("data", theId);
+
+        Course course = query.getSingleResult();
+
+        return course;
+    }
+
+    @Override
+    public Student findStudentAndCourseByStudentId(int theId) {
+        TypedQuery<Student> query = entityManager.createQuery(
+                "select s from Student s " +
+                        "JOIN FETCH s.courses " +
+                        "where s.id = :data", Student.class
+        );
+
+        query.setParameter("data", theId);
+
+        Student theStudent = query.getSingleResult();
+
+        return theStudent;
+    }
+
+    @Override
+    @Transactional
+    public void update(Student tempStudent) {
+        entityManager.merge(tempStudent);
+    }
+
+    @Override
+    @Transactional
+    public void deleteStudentById(int theId) {
+        Student theStudent = entityManager.find(Student.class, theId);
+        entityManager.remove(theStudent);
     }
 }
